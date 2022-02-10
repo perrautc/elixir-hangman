@@ -1,0 +1,1 @@
+wordlist = Dictionary.wordlist()
