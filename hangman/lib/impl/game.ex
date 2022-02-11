@@ -17,7 +17,7 @@ defmodule Hangman.Impl.Game do
 
   @spec new_game :: t
   def new_game do
-    Dictionary.word_list() |> Dictionary.random_word() |> new_game
+    Dictionary.random_word() |> new_game
   end
 
   @spec new_game(String.t()) :: t
@@ -57,6 +57,10 @@ defmodule Hangman.Impl.Game do
 
   defp score_guess(game, _bad_guess) do
     %{game | game_state: :bad_guess, turns_left: game.turns_left - 1}
+  end
+
+  defp reveal_guessed_letters(game = %{game_state: :lost}) do
+    game.letters
   end
 
   defp reveal_guessed_letters(game) do
