@@ -53,7 +53,7 @@ defmodule ImplGameTest do
     assert tally.game_state == :already_used
     {game, tally} = Game.make_move(game, "m")
     assert tally.game_state == :good_guess
-    {game, tally} = Game.make_move(game, "r")
+    {_game, tally} = Game.make_move(game, "r")
     assert tally.game_state == :won
   end
 
