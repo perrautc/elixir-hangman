@@ -1,9 +1,8 @@
 defmodule TextClient.Impl.Player do
-  @typep game :: Hangman.game()
+  @typep game :: Hangman.Runtime.Server.t()
   @typep tally :: Hangman.tally()
   @typep state :: {game, tally}
-  def start() do
-    game = Hangman.new_game()
+  def start(game) do
     tally = Hangman.tally(game)
     interact({game, tally})
   end
@@ -12,8 +11,8 @@ defmodule TextClient.Impl.Player do
     IO.puts("Congratulations. You Won!")
   end
 
-  def interact({game, _tally = %{game_state: :lost}}) do
-    IO.puts("Sorry. You Lost ... the word was #{game.letters |> Enum.join("")}")
+  def interact({_game, tally = %{game_state: :lost}}) do
+    IO.puts("Sorry. You Lost ... the word was #{tally.letters |> Enum.join("")}")
   end
 
   @spec interact(state) :: no_return
@@ -21,9 +20,8 @@ defmodule TextClient.Impl.Player do
     IO.puts(feedback_for(tally))
     IO.puts(current_word(tally))
 
-    game
-    |> Hangman.make_move(get_guess())
-    |> interact()
+    tally = Hangman.make_move(game, get_guess())
+    interact({game, tally})
   end
 
   def feedback_for(tally = %{game_state: :initializing}),
